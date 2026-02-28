@@ -1,0 +1,1 @@
+curl -sfL https://get.k3s.io/ | K3S_TOKEN="1234" INSTALL_K3S_EXEC="--node-ip=192.168.56.110 --bind-address=192.168.56.110 --advertise-address=192.168.56.110  --tls-san 192.168.56.110" sh -
