@@ -1,24 +1,33 @@
 Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/bionic64"
 
+	config.vm.provision "shell", inline: <<-SHELL
+		curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+		sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+	SHELL
+
 	config.vm.define "smounirS" do |smounirS|
 		smounirS.vm.hostname = "smounirS"
 		smounirS.vm.network "private_network", ip: "192.168.56.110"
 		smounirS.vm.provider "virtualbox" do |v|
-			v.memory = 1024
-			v.cpus = 1
+			v.memory = 2048
+			v.cpus = 4
 		end
-		smounirS.vm.provision "shell", path: "k3s-server.sh"
+		smounirS.vm.provision "shell", inline: <<-SHELL
+			curl -sfL https://get.k3s.io/ | K3S_TOKEN="1234" K3S_NODE_EXTERNAL_IP="192.168.56.110" sh -
+		SHELL
 	end
 
 	config.vm.define "smounirSW" do |smounirSW|
 		smounirSW.vm.hostname = "smounirSW"
 		smounirSW.vm.network "private_network", ip: "192.168.56.111"
 		smounirSW.vm.provider "virtualbox" do |v|
-			v.memory = 1024
-			v.cpus = 1
+			v.memory = 2048
+			v.cpus = 4
 		end
-		smounirSW.vm.provision "shell", path: "k3s-agent.sh"
+		smounirSW.vm.provision "shell", inline: <<-SHELL
+			curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.110:6443 K3S_TOKEN="1234" sh -
+		SHELL
 	end
 
 end
