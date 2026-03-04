@@ -12,11 +12,9 @@ if ! command -v kubectl &> /dev/null; then
 fi
 
 # Install k3d
-# I already have it but just in case
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
 # Create the cluster
-# need to delete it first if it exists or it fails
 k3d cluster delete iot-cluster
 k3d cluster create iot-cluster --api-port 6550 -p "8080:80@loadbalancer" -p "8888:8888@loadbalancer" --wait
 
