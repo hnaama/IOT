@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://codeberg.org/khafni/IOT.git' # UPDATE THIS TO YOUR REPO URL
+    repoURL: 'https://github.com/hnaama/IOT.git' # UPDATE THIS TO YOUR REPO URL
     targetRevision: HEAD
     path: p3/confs/app
   destination:
