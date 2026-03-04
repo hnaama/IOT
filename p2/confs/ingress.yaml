@@ -4,12 +4,9 @@ metadata:
   name: app-ingress
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.priority: "1"
 spec:
-  defaultBackend:
-    service:
-      name: app-three
-      port:
-        number: 80
+  ingressClassName: traefik
   rules:
   - host: app1.com
     http:
@@ -29,5 +26,40 @@ spec:
         backend:
           service:
             name: app-two
+            port:
+              number: 80
+  - host: app3.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app-three
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress-default
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.priority: "1"
+spec:
+  ingressClassName: traefik
+  defaultBackend:
+    service:
+      name: app-three
+      port:
+        number: 80
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app-three
             port:
               number: 80
